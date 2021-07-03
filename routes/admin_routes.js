@@ -4,7 +4,7 @@ const mongoose = require("mongoose")
 
 const Admin = require("../models/admin.model")
 const Request = require('../models/request.model')
-const OutingStatus = require('../models/outing_status.model');
+// const OutingStatus = require('../models/outing_status.model');
 const { isRegExp } = require("util");
 
 router.route('/login').get((req, res) => {
