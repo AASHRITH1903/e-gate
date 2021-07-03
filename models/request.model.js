@@ -8,7 +8,8 @@ const RequestSchema = new Schema({
   reason: String,
   req_status: String,
   outing_status: String,
-  email: String
+  email: String,
+  id: String
 })
 
 module.exports = mongoose.model('Request', RequestSchema);

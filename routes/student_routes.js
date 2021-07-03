@@ -102,15 +102,12 @@ router.route('/dashboard/requests').get((req, res) => {
 router.route('/dashboard/requests/send').post((req, res) => {
   let name = req.body.name;
   let location = req.body.location;
-  let email = req.body.email;
   let reason = req.body.reason;
 
-  let id;
-
-  console.log(name, location, reason, email);
+  console.log(name, location, reason);
 
   Request.findOne({
-    email
+    id
   }, (err, doc) => {
     if (err) {
       console.log(err);
@@ -123,24 +120,27 @@ router.route('/dashboard/requests/send').post((req, res) => {
         reason: reason,
         req_status: 'pending',
         outing_status: 'null',
-        email: email
+        id: id
       });
 
       request.save(function(err, book) {
         if (err) return console.error(err);
         console.log(book.name + " saved to requests collection.");
       });
-      flag1 = 0;
+      flag1 = 2;
       res.render('Student/index', { flag1});
     } else {
 
       Request.findOneAndUpdate({
-        "email": email
+        "id": id
       }, {
         "$set": {
+          name: name,
           location: location,
           reason: reason,
-          status: 'pending',
+          req_status: 'pending',
+          outing_status: 'null',
+          id: id
         }
       }).exec(function(err, book) {
         if (err) {
