@@ -4,8 +4,6 @@ const mongoose = require("mongoose")
 
 const Admin = require("../models/admin.model")
 const Request = require('../models/request.model')
-const OutingStatus = require('../models/outing_status.model');
-const { isRegExp } = require("util");
 
 router.route('/login').get((req, res) => {
         //res.sendFile(path.join(__dirname , '..' , 'views', 'LoginForms', 'AdminLogin.html'))
@@ -49,6 +47,18 @@ router.route('/dashboard/outing_requests').get((req, res) => {
                 }else{
                         console.log(docs);
                         res.render('Admin/outing_requests', {requests : docs})
+                }
+        })
+})
+
+router.route('/dashboard/outing_requests/accepted/:id').get((req, res) => {
+        Request.findByIdAndUpdate(req.params.id, {req_status : "accepted", outing_status: "In"}, (err, doc) => {
+                if(err){
+                        console.log(err);
+                }else{
+                        console.log("updated succesfully : ");
+                        console.log(doc);
+                        res.redirect('/admin/dashboard/outing_requests')
                 }
         })
 })

@@ -28,7 +28,7 @@ mongoose.connect(URI, {
   useFindAndModify: false
 })
 mongoose.connection.once('open', () => console.log("Database connection established"))
-
+mongoose.set('useFindAndModify',false);
 
 //routes
 
