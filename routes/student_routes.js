@@ -47,7 +47,17 @@ router.route('/dashboard').get((req, res) => {
 })
 
 router.route('/dashboard/editprofile').get((req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'views', 'Student', 'profile.html'))
+  Student.findById(id, function(err, docs) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render('Student/profile', {
+        username: docs.username,
+        // bloodgroup: docs.bloodgroup,
+        phonenumber: docs.phonenumber,
+      });
+    }
+  });
 })
 
 router.route('/dashboard/editprofile/update').post((req, res) => {
@@ -103,8 +113,10 @@ router.route('/dashboard/requests/send').post((req, res) => {
   let name = req.body.name;
   let location = req.body.location;
   let reason = req.body.reason;
+  let outtime = req.body.outtime;
+  let intime = req.body.intime;
 
-  console.log(name, location, reason);
+  console.log(name, location, reason, outtime, intime);
 
   Request.findOne({
     id
