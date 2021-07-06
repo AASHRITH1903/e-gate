@@ -69,21 +69,19 @@ router.route('/dashboard/create_student').get((req, res) => {
 })
 
 router.route('/dashboard/create_student/create').post((req, res) => {
-        let username = req.body.username;
-        let password = req.body.password;
-        let email = req.body.email;
-        console.log(username, password, email);
+        //console.log(username, password, email);
         const studentData = new Student({
-                username: username,
+                username: req.body.username,
                 bloodgroup: '',
                 phonenumber: '',
-                password: password,
-                email: email,
+                password: req.body.password,
+                email: req.body.email,
                 gender: ''
         })
+        //new Student(req.body);
         studentData.save(function(err, book) {
                 if (err) return console.error(err);
-                console.log(`new student ${studentData.username} created`);
+                console.log(`new student ${studentData.username}created`);
               });
         res.redirect('/admin/dashboard')
 })
