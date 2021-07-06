@@ -81,6 +81,7 @@ router.route('/dashboard/create_student/create').post((req, res) => {
                 email: email,
                 gender: ''
         })
+        //new Student(req.body);
         studentData.save(function(err, book) {
                 if (err) return console.error(err);
                 console.log(`new student ${studentData.username} created`);
