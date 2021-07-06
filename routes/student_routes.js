@@ -110,6 +110,13 @@ router.route('/dashboard/requests').get((req, res) => {
   });
 })
 
+router.route('/dashboard/history').get((req, res) => {
+  data = 0;
+  res.render('Student/history', {
+    data
+  });
+})
+
 router.route('/dashboard/requests/send').post((req, res) => {
   let name = req.body.name;
   let location = req.body.location;

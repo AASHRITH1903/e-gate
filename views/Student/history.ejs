@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <style>
+      h1, h3, tr{
+          text-align: center;
+      }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>My Outing Requests</h1>
+  <p><h3>Username: <strong>Gautam</strong></h3></p>  
+  <input class="form-control" id="myInput" type="text" placeholder="Search..">
+  <br>
+  <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+          <th>Requested Outgoing Time & Date</th>
+          <th>Requested Arrival Time & Date</th>
+          <th>Permission Status</th>
+          <th>Actual Arrival Time & Date</th>
+      </tr>
+    </thead>
+    <tbody id="myTable">
+      <tr>
+          <td>Jan 29, 2020  18:45</td>
+          <td>Feb 1, 2020  08:45</td>
+          <td>Pending</td>
+          <td>nil</td>
+      </tr>
+      <tr>
+          <td>Feb 6, 2020  09:23</td>
+          <td>Feb 27, 2020  16:27</td>
+          <td>Rejected</td>
+          <td>nil</td>
+      </tr>
+      <tr>
+          <td>Mar 16,2020  14:20</td>
+          <td>Mar 18,2020  15:20</td>
+          <td>Accepted</td>
+          <td>Mar 20,2020  16:27</td>
+      </tr>
+      <tr>
+        <td>Mar 16,2020  14:20</td>
+        <td>Mar 18,2020  15:20</td>
+        <td>Accepted</td>
+        <td>nil(Not went for outing)</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
+
+</body>
+</html>
