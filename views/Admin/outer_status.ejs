@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+        <%- include("../partials/admin.head.ejs", {title : "Outer Status"}) %>
+  </head>
+
+  <body>
+
+            <%- include('../partials/admin.nav.ejs') %>
+
+              <div class="container">
+                <h2>Outer Status</h2>
+
+                      <div class="card">
+                        <div class="card-header bg-warning">
+                          1.
+                        </div>
+                        <div class="card-body">
+                          <h5 class="card-title">Name : Aashrith</h5>
+                          <h5 class="card-title">Roll : CS19B025</h5>
+                          <p class="card-text">reason : ....................................</p>
+                          <p class="card-text">Status : In</p>
+                          <a href="#" class="btn btn-dark">set out</a>
+                          <a href="#" class="btn btn-dark">set fin</a>
+                        </div>
+                      </div>
+
+                      <% reqs.forEach(function(req){ %>
+                              <h1><%= req.name %></h1>
+                      <% }) %>
+
+              </div>
+
+
+
+            <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous" ></script>
+
+            <script src="/static/js/admin.js"></script>
+
+
+  </body>
+</html>
