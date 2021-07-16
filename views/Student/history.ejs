@@ -17,47 +17,34 @@
 
 <div class="container">
   <h1>My Outing Requests</h1>
-  <p><h3>Username: <strong>Gautam</strong></h3></p>  
+  <p><h3>Username: <strong>Gautam</strong><br><br>Outing ID : <strong><%=prevRequests[0].id%></strong></h3></p>  
   <input class="form-control" id="myInput" type="text" placeholder="Search..">
   <br>
   <table class="table table-bordered table-striped">
     <thead>
       <tr>
+          <th>Outing Reason</th>
+          <th>Location</th>
+          <th>Permission Status</th>
           <th>Requested Outgoing Time & Date</th>
           <th>Requested Arrival Time & Date</th>
-          <th>Permission Status</th>
           <th>Actual Arrival Time & Date</th>
       </tr>
     </thead>
     <tbody id="myTable">
-      <tr>
-          <td>Jan 29, 2020  18:45</td>
-          <td>Feb 1, 2020  08:45</td>
-          <td>Pending</td>
-          <td>nil</td>
-      </tr>
-      <tr>
-          <td>Feb 6, 2020  09:23</td>
-          <td>Feb 27, 2020  16:27</td>
-          <td>Rejected</td>
-          <td>nil</td>
-      </tr>
-      <tr>
-          <td>Mar 16,2020  14:20</td>
-          <td>Mar 18,2020  15:20</td>
-          <td>Accepted</td>
-          <td>Mar 20,2020  16:27</td>
-      </tr>
-      <tr>
-        <td>Mar 16,2020  14:20</td>
-        <td>Mar 18,2020  15:20</td>
-        <td>Accepted</td>
-        <td>nil(Not went for outing)</td>
-      </tr>
+      <% prevRequests.forEach( request =>{ %>
+        <tr>
+          <td><%= request.reason %></td>
+          <td><%= request.location %></td>
+          <td><%= request.req_status %></td>
+          <td><%= request.outtime %></td>
+          <td><%= request.intime %></td>
+          <td><%= request.actual_intime %></td>
+        </tr>
+      <% }) %>
     </tbody>
   </table>
 </div>
-
 
 <script>
 $(document).ready(function(){

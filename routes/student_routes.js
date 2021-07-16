@@ -110,12 +110,25 @@ router.route('/dashboard/requests').get((req, res) => {
   });
 })
 
-router.route('/dashboard/history').get((req, res) => {
-  data = 0;
-  res.render('Student/history', {
-    data
-  });
+router.route('/dashboard/history').get((req, res) =>{
+  // Student.findOne({email},(err,docs)=>{
+  //   res.render('Student/history',{prevRequests: docs.my_requests})
+  // })
+  const userId = id;
+  console.log('kadsjcn',id);
+  Request.find({id: userId},(err,docs)=>{
+    if (err) {
+      console.log(err);
+    } else if (!docs) {
+      console.log('Student details unavailable');
+    } else{
+      console.log('askjndkj', docs);
+      res.render('Student/history',{prevRequests: docs})
+
+    }
+  })
 })
+
 
 router.route('/dashboard/requests/send').post((req, res) => {
   let name = req.body.name;
