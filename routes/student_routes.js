@@ -2,6 +2,9 @@ const router = require('express').Router();
 const path = require('path');
 const Student = require('../models/student.model');
 const Request = require('../models/request.model');
+const bcrypt = require('bcrypt');
+
+const saltRounds = 10;
 
 
 let data;
@@ -23,8 +26,7 @@ router.route('/login/check').post((req, res) => {
   console.log(email, password);
 
   Student.findOne({
-    email,
-    password
+    email
   }, (err, doc) => {
     if (err) {
       console.log(err);
@@ -35,8 +37,15 @@ router.route('/login/check').post((req, res) => {
         data
       });
     } else {
-      id = doc.id;
-      res.redirect('/student/dashboard');
+      bcrypt.compare(password, doc.password, function(error, result) {
+        if(result === true) {
+          id = doc.id;
+          res.redirect('/student/dashboard');
+        }
+        if(error){
+          console.log(err);
+        }
+      });
     }
   })
 })
@@ -110,20 +119,24 @@ router.route('/dashboard/requests').get((req, res) => {
   });
 })
 
-router.route('/dashboard/history').get((req, res) =>{
+router.route('/dashboard/history').get((req, res) => {
   // Student.findOne({email},(err,docs)=>{
   //   res.render('Student/history',{prevRequests: docs.my_requests})
   // })
   const userId = id;
-  console.log('kadsjcn',id);
-  Request.find({id: userId},(err,docs)=>{
+  console.log('kadsjcn', id);
+  Request.find({
+    id: userId
+  }, (err, docs) => {
     if (err) {
       console.log(err);
     } else if (!docs) {
       console.log('Student details unavailable');
-    } else{
+    } else {
       console.log('askjndkj', docs);
-      res.render('Student/history',{prevRequests: docs})
+      res.render('Student/history', {
+        prevRequests: docs
+      })
 
     }
   })
