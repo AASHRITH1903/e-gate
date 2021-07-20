@@ -72,10 +72,11 @@ router.route('/dashboard/editprofile/update').post((req, res) => {
       
         if (!(password === reTypePassword)) {
           console.log("Passwords do not match");
+          flag1 = 0;        // fill it with("Passwords does not match string")
           res.redirect('/admin/dashboard');
         } else {
           // Find id
-          Admin.findOneAndUpdate({
+          Student.findOneAndUpdate({
             "_id": id
           }, {
             "$set": {
@@ -90,10 +91,23 @@ router.route('/dashboard/editprofile/update').post((req, res) => {
               console.log(err);
               res.status(500).send(err);
             } else {
-              res.redirect('/admin/dashboard');
+              flag1 = 1; // 28
+              Admin.findById(id, (err, doc) =>{
+                if(err) {
+                        console.log(err);
+                } else if(!doc) {
+                        console.log("admin not found");
+                }
+                else {
+                        res.render('Admin/profile', {data: doc})
+                }
+        })
             }
           });
         }
+      
+        // Add ejs as profile edited option
+        // res.redirect('/student/dashboard');
       })
 
 router.route('/dashboard/outing_requests').get((req, res) => {

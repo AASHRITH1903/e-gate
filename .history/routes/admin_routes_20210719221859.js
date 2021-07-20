@@ -47,53 +47,49 @@ router.route('/dashboard').get((req, res) => {
 })
 
 router.route('/dashboard/editprofile').get((req, res) => {
-        Admin.findById(id, (err, doc) =>{
-                if(err) {
-                        console.log(err);
-                } else if(!doc) {
-                        console.log("admin not found");
-                }
-                else {
-                        res.render('Admin/profile', {data: doc})
-                }
-        })
+        res.render('Admin/profile.ejs');
 })
 
 router.route('/dashboard/editprofile/update').post((req, res) => {
         // make a difference between name and username
-        let fullname = req.body.fullname;
-        let mobile = req.body.mobile;
-        let email = req.body.email;
+        let username = req.body.username;
+        let bloodgroup = req.body.bloodgroup;
+        let phonenumber = req.body.phonenumber;
         let password = req.body.password;
         let reTypePassword = req.body.reTypePassword;
-        let address = req.body.address;
+        let gender = req.body.gender;
       
-        console.log(fullname, mobile, email, password, address, id);
+        console.log(username, bloodgroup, phonenumber, password, gender, id);
       
         if (!(password === reTypePassword)) {
           console.log("Passwords do not match");
-          res.redirect('/admin/dashboard');
+          flag1 = 0;        // fill it with("Passwords does not match string")
+          res.redirect('/student/dashboard');
         } else {
           // Find id
-          Admin.findOneAndUpdate({
+          Student.findOneAndUpdate({
             "_id": id
           }, {
             "$set": {
-              "fullname": fullname,
-              "mobile": mobile,
-              "email": email,
+              "username": username,
+              "bloodgroup": bloodgroup,
+              "phonenumber": phonenumber,
               "password": password,
-              "address": address
+              "gender": gender
             }
           }).exec(function(err, book) {
             if (err) {
               console.log(err);
               res.status(500).send(err);
             } else {
-              res.redirect('/admin/dashboard');
+              flag1 = 1; // 28
+              res.redirect('/student/dashboard');
             }
           });
         }
+      
+        // Add ejs as profile edited option
+        // res.redirect('/student/dashboard');
       })
 
 router.route('/dashboard/outing_requests').get((req, res) => {

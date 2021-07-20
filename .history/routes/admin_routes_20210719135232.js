@@ -6,8 +6,6 @@ const Admin = require("../models/admin.model")
 const Request = require('../models/request.model')
 const Student = require('../models/student.model')
 
-let id;
-
 router.route('/login').get((req, res) => {
         //res.sendFile(path.join(__dirname , '..' , 'views', 'LoginForms', 'AdminLogin.html'))
         res.render('LoginForms/AdminLogin')
@@ -26,75 +24,18 @@ router.route('/login/check').post((req, res) => {
                         console.log("admin not found");
                         res.redirect('/admin/login')
                 } else {
-                        id=doc.id;
                         res.redirect('/admin/dashboard')
                 }
         })
 
 })
-
 router.route('/dashboard').get((req, res) => {
-        Admin.findById(id, (err, doc) =>{
-                if(err) {
-                        console.log(err);
-                } else if(!doc) {
-                        console.log("admin not found");
-                }
-                else {
-                        res.render('Admin/dashboard', {data: doc})
-                }
-        })
+        res.render('Admin/dashboard')
 })
 
-router.route('/dashboard/editprofile').get((req, res) => {
-        Admin.findById(id, (err, doc) =>{
-                if(err) {
-                        console.log(err);
-                } else if(!doc) {
-                        console.log("admin not found");
-                }
-                else {
-                        res.render('Admin/profile', {data: doc})
-                }
-        })
+router.route('/dashboard/profile').get((req, res) => {
+        res.render('Admin/profile')
 })
-
-router.route('/dashboard/editprofile/update').post((req, res) => {
-        // make a difference between name and username
-        let fullname = req.body.fullname;
-        let mobile = req.body.mobile;
-        let email = req.body.email;
-        let password = req.body.password;
-        let reTypePassword = req.body.reTypePassword;
-        let address = req.body.address;
-      
-        console.log(fullname, mobile, email, password, address, id);
-      
-        if (!(password === reTypePassword)) {
-          console.log("Passwords do not match");
-          res.redirect('/admin/dashboard');
-        } else {
-          // Find id
-          Admin.findOneAndUpdate({
-            "_id": id
-          }, {
-            "$set": {
-              "fullname": fullname,
-              "mobile": mobile,
-              "email": email,
-              "password": password,
-              "address": address
-            }
-          }).exec(function(err, book) {
-            if (err) {
-              console.log(err);
-              res.status(500).send(err);
-            } else {
-              res.redirect('/admin/dashboard');
-            }
-          });
-        }
-      })
 
 router.route('/dashboard/outing_requests').get((req, res) => {
 
