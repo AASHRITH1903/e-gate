@@ -5,6 +5,7 @@ const app = express();
 const cors = require("cors");
 const path = require("path")
 const mongoose = require('mongoose')
+const bcrypt = require("bcrypt");
 
 // Routers
 const AdminRouter = require("./routes/admin_routes")

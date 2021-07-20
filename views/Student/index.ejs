@@ -123,6 +123,12 @@
       text-shadow: 0px 0px 1px black;
     }
 
+    .logout{
+      position: absolute;
+      right: 5%;
+      color: white;
+    }
+
     /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
     @media screen and (max-height: 450px) {
       .card {
@@ -145,7 +151,7 @@
   <div id="mySidebar" class="sidebar">
     <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
     <a href="#">About</a>
-    <a href="#">Services</a>
+    <a href="/student/dashboard/history">History</a>
     <a href="#">Clients</a>
     <a href="#">Contact</a>
   </div>
@@ -153,6 +159,9 @@
   <div id="main">
     <!-- <button class="openbtn" onclick="openNav()">&#9776; <h2> Student Dashboard</h2></button> -->
     <span class="sideButton" style="font-size:30px;cursor:pointer;color:#2541B2;" onclick="openNav()">&#9776; Student Dashboard</span>
+    <a href="/" class="btn btn-danger btn-lg logout">
+      <span class="glyphicon glyphicon-log-out"></span> Log out
+    </a>
     <hr class="headLine">
     <!-- <p style="color: white">Click on the hamburger menu/bar icon to open the sidebar, and push this content to the right.</p> -->
     <div class="row">
@@ -228,17 +237,17 @@
 
   <% if (flag1 === 0) { %>
   <script>
-        alert("Failed.");
+    alert("Failed.");
   </script>
   <% } else if(flag1 === 1){%>
   <script>
-        alert("Your profile is being updated.");
+    alert("Your profile is being updated.");
   </script>
   <% } else if(flag1 === 2){%>
   <script>
-        alert("Your request is being sent.");
+    alert("Your request is being sent.");
   </script>
-<% } %>
+  <% } %>
 
 </body>
 

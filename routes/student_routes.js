@@ -2,11 +2,15 @@ const router = require('express').Router();
 const path = require('path');
 const Student = require('../models/student.model');
 const Request = require('../models/request.model');
+const bcrypt = require('bcrypt');
+
+const saltRounds = 10;
 
 
 let data;
 let flag1 = -1;
 let id;
+let email
 
 router.route('/login').get((req, res) => {
   data = 0;
@@ -16,14 +20,13 @@ router.route('/login').get((req, res) => {
 })
 
 router.route('/login/check').post((req, res) => {
-  let email = req.body.email;
+  email = req.body.email;
   let password = req.body.password;
 
   console.log(email, password);
 
   Student.findOne({
-    email,
-    password
+    email
   }, (err, doc) => {
     if (err) {
       console.log(err);
@@ -34,20 +37,37 @@ router.route('/login/check').post((req, res) => {
         data
       });
     } else {
-      id = doc.id;
-      res.redirect('/student/dashboard');
+      bcrypt.compare(password, doc.password, function(error, result) {
+        if(result === true) {
+          id = doc.id;
+          res.redirect('/student/dashboard');
+        }
+        if(error){
+          console.log(err);
+        }
+      });
     }
   })
 })
 
 router.route('/dashboard').get((req, res) => {
+  console.log(flag1);
   res.render('Student/index', {
     flag1
   });
 })
 
 router.route('/dashboard/editprofile').get((req, res) => {
-  res.sendFile(path.join(__dirname, '..', 'views', 'Student', 'profile.html'))
+  Student.findById(id, function(err, docs) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.render('Student/profile', {
+        username: docs.username,
+        phonenumber: docs.phonenumber
+      });
+    }
+  });
 })
 
 router.route('/dashboard/editprofile/update').post((req, res) => {
@@ -59,11 +79,11 @@ router.route('/dashboard/editprofile/update').post((req, res) => {
   let reTypePassword = req.body.reTypePassword;
   let gender = req.body.gender;
 
-  console.log(username, bloodgroup, phonenumber, password, gender, id);
+  console.log(username, bloodgroup, phonenumber, password, gender, id, email);
 
   if (!(password === reTypePassword)) {
     console.log("Passwords do not match");
-    flag1 = 0;        // fill it with("Passwords does not match string")
+    flag1 = 0; // fill it with("Passwords does not match string")
     res.redirect('/student/dashboard');
   } else {
     // Find id
@@ -99,18 +119,41 @@ router.route('/dashboard/requests').get((req, res) => {
   });
 })
 
+router.route('/dashboard/history').get((req, res) => {
+  // Student.findOne({email},(err,docs)=>{
+  //   res.render('Student/history',{prevRequests: docs.my_requests})
+  // })
+  const userId = id;
+  console.log('kadsjcn', id);
+  Request.find({
+    id: userId
+  }, (err, docs) => {
+    if (err) {
+      console.log(err);
+    } else if (!docs) {
+      console.log('Student details unavailable');
+    } else {
+      console.log('askjndkj', docs);
+      res.render('Student/history', {
+        prevRequests: docs
+      })
+
+    }
+  })
+})
+
+
 router.route('/dashboard/requests/send').post((req, res) => {
   let name = req.body.name;
   let location = req.body.location;
-  let email = req.body.email;
   let reason = req.body.reason;
+  let outtime = req.body.outtime;
+  let intime = req.body.intime;
 
-  let id;
-
-  console.log(name, location, reason, email);
+  console.log(name, location, reason, outtime, intime);
 
   Request.findOne({
-    email
+    id
   }, (err, doc) => {
     if (err) {
       console.log(err);
@@ -123,7 +166,10 @@ router.route('/dashboard/requests/send').post((req, res) => {
         reason: reason,
         req_status: 'pending',
         outing_status: 'null',
-        email: email
+        actual_intime: 'null',
+        id: id,
+        outtime: outtime,
+        intime: intime
       });
 
       request.save(function(err, book) {
@@ -131,16 +177,22 @@ router.route('/dashboard/requests/send').post((req, res) => {
         console.log(book.name + " saved to requests collection.");
       });
       flag1 = 0;
-      res.render('Student/index', { flag1});
+      res.render('Student/index', {
+        flag1
+      });
     } else {
 
       Request.findOneAndUpdate({
-        "email": email
+        "id": id
       }, {
         "$set": {
           location: location,
           reason: reason,
-          status: 'pending',
+          req_status: 'pending',
+          outing_status: 'null',
+          actual_intime: 'null',
+          outtime: outtime,
+          intime: intime
         }
       }).exec(function(err, book) {
         if (err) {
