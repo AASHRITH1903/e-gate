@@ -1,25 +1,19 @@
 const router = require("express").Router();
 const path = require("path")
 const mongoose = require("mongoose")
-const bcrypt = require('bcrypt');
 
 const Admin = require("../models/admin.model")
 const Request = require('../models/request.model')
 const Student = require('../models/student.model')
 
-<<<<<<< HEAD
 let id;
-=======
-const saltRounds = 10;
->>>>>>> fbfaeb60aa155789b839affc894ef71766c8f1fc
 
 router.route('/login').get((req, res) => {
-  //res.sendFile(path.join(__dirname , '..' , 'views', 'LoginForms', 'AdminLogin.html'))
-  res.render('LoginForms/AdminLogin')
+        //res.sendFile(path.join(__dirname , '..' , 'views', 'LoginForms', 'AdminLogin.html'))
+        res.render('LoginForms/AdminLogin')
 })
 
 router.route('/login/check').post((req, res) => {
-<<<<<<< HEAD
         let username = req.body.username;
         let password = req.body.password;
 
@@ -36,31 +30,10 @@ router.route('/login/check').post((req, res) => {
                         res.redirect('/admin/dashboard')
                 }
         })
-=======
-  let username = req.body.username;
-  let password = req.body.password;
-
-  console.log(username, password);
-
-  Admin.findOne({
-    username,
-    password
-  }, (err, doc) => {
-    if (err) {
-      console.log(err);
-    } else if (!doc) {
-      console.log("admin not found");
-      res.redirect('/admin/login')
-    } else {
-      res.redirect('/admin/dashboard')
-    }
-  })
->>>>>>> fbfaeb60aa155789b839affc894ef71766c8f1fc
 
 })
 
 router.route('/dashboard').get((req, res) => {
-<<<<<<< HEAD
         Admin.findById(id, (err, doc) =>{
                 if(err) {
                         console.log(err);
@@ -84,13 +57,6 @@ router.route('/dashboard/editprofile').get((req, res) => {
                         res.render('Admin/profile', {data: doc})
                 }
         })
-=======
-  res.render('Admin/dashboard')
-})
-
-router.route('/dashboard/profile').get((req, res) => {
-  res.render('Admin/profile')
->>>>>>> fbfaeb60aa155789b839affc894ef71766c8f1fc
 })
 
 router.route('/dashboard/editprofile/update').post((req, res) => {
@@ -106,10 +72,11 @@ router.route('/dashboard/editprofile/update').post((req, res) => {
       
         if (!(password === reTypePassword)) {
           console.log("Passwords do not match");
+          flag1 = 0;        // fill it with("Passwords does not match string")
           res.redirect('/admin/dashboard');
         } else {
           // Find id
-          Admin.findOneAndUpdate({
+          Student.findOneAndUpdate({
             "_id": id
           }, {
             "$set": {
@@ -124,64 +91,47 @@ router.route('/dashboard/editprofile/update').post((req, res) => {
               console.log(err);
               res.status(500).send(err);
             } else {
-              res.redirect('/admin/dashboard');
+              flag1 = 1; // 28
+              res.render('/admin/dashboard');
             }
           });
         }
+      
+        // Add ejs as profile edited option
+        // res.redirect('/student/dashboard');
       })
 
 router.route('/dashboard/outing_requests').get((req, res) => {
 
-  Request.find({}, (err, docs) => {
-    if (err) {
-      console.log(err);
-    } else if (!docs) {
-      console.log("doc not found");
-    } else {
-      console.log(docs);
-      res.render('Admin/outing_requests', {
-        requests: docs
-      })
-    }
-  })
+        Request.find({}, (err, docs) => {
+                if (err) {
+                        console.log(err);
+                } else if (!docs) {
+                        console.log("doc not found");
+                } else {
+                        console.log(docs);
+                        res.render('Admin/outing_requests', { requests: docs })
+                }
+        })
 })
 
 router.route('/dashboard/outing_requests/accepted/:id').get((req, res) => {
-  Request.findByIdAndUpdate(req.params.id, {
-    req_status: "accepted",
-    outing_status: "In"
-  }, (err, doc) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("updated succesfully : ");
-      console.log(doc);
-      res.redirect('/admin/dashboard/outing_requests')
-    }
-  })
-})
-
-router.route('/dashboard/outing_requests/rejected/:id').get((req, res) => {
-  Request.findByIdAndUpdate(req.params.id, {
-    req_status: "rejected",
-    outing_status: "Null"
-  }, (err, doc) => {
-    if (err) {
-      console.log(err);
-    } else {
-      console.log("updated succesfully : ");
-      console.log(doc);
-      res.redirect('/admin/dashboard/outing_requests')
-    }
-  })
+        Request.findByIdAndUpdate(req.params.id, { req_status: "accepted", outing_status: "In" }, (err, doc) => {
+                if (err) {
+                        console.log(err);
+                } else {
+                        console.log("updated succesfully : ");
+                        console.log(doc);
+                        res.redirect('/admin/dashboard/outing_requests')
+                }
+        })
 })
 
 router.route('/dashboard/create_student').get((req, res) => {
-  res.render('Admin/create_student')
+        res.render('Admin/create_student')
 })
 
 router.route('/dashboard/create_student/create').post((req, res) => {
-<<<<<<< HEAD
         let username = req.body.username;
         let password = req.body.password;
         let email = req.body.email;
@@ -230,65 +180,7 @@ router.route('/dashboard/outer_status').get((req, res) => {
                         <%= name %>*/
                          
                 }
-=======
-  bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
-    let username = req.body.username;
-    let password = req.body.password;
-    let email = req.body.email;
-    console.log(username, password, email);
-    const studentData = new Student({
-      username: username,
-      bloodgroup: '',
-      phonenumber: '',
-      password: hash,
-      email: email,
-      gender: ''
-    })
-    studentData.save(function(error, book) {
-      if (error) return console.error(error);
-      console.log(`new student ${studentData.username} created`);
-    });
-    res.redirect('/admin/dashboard')
-  });
-})
-
-router.route('/dashboard/outer_status').get((req, res) => {
-  OutingStatus.find({}, (err, docs) => {
-    if (err) {
-      console.log(err);
-    } else if (!docs) {
-      console.log("doc not found");
-    } else {
-      console.log(docs);
-      req_ids = []
-      docs.forEach((doc) => {
-        req_ids.push(mongoose.Types.ObjectId(doc.request_id))
-      })
-      Request.find({
-        '_id': {
-          $in: req_ids
-        }
-      }, (err, accepted_requests) => {
-        console.log(accepted_requests);
-        res.render("Admin/outer_status", {
-          reqs: accepted_requests
->>>>>>> fbfaeb60aa155789b839affc894ef71766c8f1fc
         })
-      })
-
-      /*
-      res.render('path_to_ejs' , {
-              name : "aasrith",
-              username : "jdnkjvn",
-              ph : 'djsbkjs'
-      })
-
-      <%= name %>
-      <%= username %>
-      <%= name %>
-       */
-    }
-  })
 })
 
 module.exports = router;
