@@ -7,11 +7,8 @@ const Admin = require("../models/admin.model")
 const Request = require('../models/request.model')
 const Student = require('../models/student.model')
 
-<<<<<<< HEAD
 let id;
-=======
 const saltRounds = 10;
->>>>>>> fbfaeb60aa155789b839affc894ef71766c8f1fc
 
 router.route('/login').get((req, res) => {
   //res.sendFile(path.join(__dirname , '..' , 'views', 'LoginForms', 'AdminLogin.html'))
@@ -19,24 +16,6 @@ router.route('/login').get((req, res) => {
 })
 
 router.route('/login/check').post((req, res) => {
-<<<<<<< HEAD
-        let username = req.body.username;
-        let password = req.body.password;
-
-        console.log(username, password);
-
-        Admin.findOne({ username, password }, (err, doc) => {
-                if (err) {
-                        console.log(err);
-                } else if (!doc) {
-                        console.log("admin not found");
-                        res.redirect('/admin/login')
-                } else {
-                        id=doc.id;
-                        res.redirect('/admin/dashboard')
-                }
-        })
-=======
   let username = req.body.username;
   let password = req.body.password;
 
@@ -52,83 +31,76 @@ router.route('/login/check').post((req, res) => {
       console.log("admin not found");
       res.redirect('/admin/login')
     } else {
+      id = doc.id;
       res.redirect('/admin/dashboard')
     }
   })
->>>>>>> fbfaeb60aa155789b839affc894ef71766c8f1fc
-
 })
 
 router.route('/dashboard').get((req, res) => {
-<<<<<<< HEAD
-        Admin.findById(id, (err, doc) =>{
-                if(err) {
-                        console.log(err);
-                } else if(!doc) {
-                        console.log("admin not found");
-                }
-                else {
-                        res.render('Admin/dashboard', {data: doc})
-                }
-        })
+  Admin.findById(id, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else if (!doc) {
+      console.log("admin not found");
+    } else {
+      res.render('Admin/dashboard', {
+        data: doc
+      })
+    }
+  })
 })
 
 router.route('/dashboard/editprofile').get((req, res) => {
-        Admin.findById(id, (err, doc) =>{
-                if(err) {
-                        console.log(err);
-                } else if(!doc) {
-                        console.log("admin not found");
-                }
-                else {
-                        res.render('Admin/profile', {data: doc})
-                }
-        })
-=======
-  res.render('Admin/dashboard')
-})
-
-router.route('/dashboard/profile').get((req, res) => {
-  res.render('Admin/profile')
->>>>>>> fbfaeb60aa155789b839affc894ef71766c8f1fc
+  Admin.findById(id, (err, doc) => {
+    if (err) {
+      console.log(err);
+    } else if (!doc) {
+      console.log("admin not found");
+    } else {
+      res.render('Admin/profile', {
+        data: doc
+      })
+    }
+  })
 })
 
 router.route('/dashboard/editprofile/update').post((req, res) => {
-        // make a difference between name and username
-        let fullname = req.body.fullname;
-        let mobile = req.body.mobile;
-        let email = req.body.email;
-        let password = req.body.password;
-        let reTypePassword = req.body.reTypePassword;
-        let address = req.body.address;
-      
-        console.log(fullname, mobile, email, password, address, id);
-      
-        if (!(password === reTypePassword)) {
-          console.log("Passwords do not match");
-          res.redirect('/admin/dashboard');
-        } else {
-          // Find id
-          Admin.findOneAndUpdate({
-            "_id": id
-          }, {
-            "$set": {
-              "fullname": fullname,
-              "mobile": mobile,
-              "email": email,
-              "password": password,
-              "address": address
-            }
-          }).exec(function(err, book) {
-            if (err) {
-              console.log(err);
-              res.status(500).send(err);
-            } else {
-              res.redirect('/admin/dashboard');
-            }
-          });
-        }
-      })
+  // make a difference between name and username
+  let fullname = req.body.fullname;
+  let mobile = req.body.mobile;
+  let email = req.body.email;
+  let password = req.body.password;
+  let reTypePassword = req.body.reTypePassword;
+  let address = req.body.address;
+
+  console.log(fullname, mobile, email, password, address, id);
+
+  if (!(password === reTypePassword)) {
+    console.log("Passwords do not match");
+    res.redirect('/admin/dashboard');
+  } else {
+    // Find id
+    Admin.findOneAndUpdate({
+      "_id": id
+    }, {
+      "$set": {
+        "fullname": fullname,
+        "mobile": mobile,
+        "email": email,
+        "password": password,
+        "address": address
+      }
+    }).exec(function(err, book) {
+      if (err) {
+        console.log(err);
+        res.status(500).send(err);
+      } else {
+        res.redirect('/admin/dashboard');
+      }
+    });
+  }
+})
 
 router.route('/dashboard/outing_requests').get((req, res) => {
 
@@ -181,114 +153,121 @@ router.route('/dashboard/create_student').get((req, res) => {
 })
 
 router.route('/dashboard/create_student/create').post((req, res) => {
-<<<<<<< HEAD
-        let username = req.body.username;
-        let password = req.body.password;
-        let email = req.body.email;
-        console.log(username, password, email);
-        const studentData = new Student({
-                username: username,
-                bloodgroup: '',
-                phonenumber: '',
-                password: password,
-                email: email,
-                gender: ''
-        })
-        studentData.save(function(err, book) {
-                if (err) return console.error(err);
-                console.log(`new student ${studentData.username} created`);
-              });
-        res.redirect('/admin/dashboard/create_student')
-})
-
-router.route('/dashboard/outer_status').get((req, res) => {
-        Request.find({}, (err, docs) => {
-                if (err) {
-                        console.log(err);
-                } else if (!docs) {
-                        console.log("doc not found");
-                } else {
-                        console.log(docs);
-                        req_ids = []
-                        docs.forEach((doc) => {
-                                req_ids.push(mongoose.Types.ObjectId(doc.request_id))
-                        })
-                        Request.find({ '_id': { $in: req_ids } }, (err, accepted_requests) => {
-                                console.log("safasf",accepted_requests);
-                                res.render("Admin/outer_status", { reqs: accepted_requests })
-                        })
-
-                        
-                        /*res.render('path_to_ejs' , {
-                                name : "aasrith",
-                                username : "jdnkjvn",
-                                ph : 'djsbkjs'
-                        })
-
-                        <%= name %>
-                        <%= username %>
-                        <%= name %>*/
-                         
-                }
-=======
-  bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
-    let username = req.body.username;
-    let password = req.body.password;
-    let email = req.body.email;
-    console.log(username, password, email);
-    const studentData = new Student({
-      username: username,
-      bloodgroup: '',
-      phonenumber: '',
-      password: hash,
-      email: email,
-      gender: ''
-    })
-    studentData.save(function(error, book) {
-      if (error) return console.error(error);
-      console.log(`new student ${studentData.username} created`);
-    });
-    res.redirect('/admin/dashboard')
-  });
-})
-
-router.route('/dashboard/outer_status').get((req, res) => {
-  OutingStatus.find({}, (err, docs) => {
-    if (err) {
-      console.log(err);
-    } else if (!docs) {
-      console.log("doc not found");
-    } else {
-      console.log(docs);
-      req_ids = []
-      docs.forEach((doc) => {
-        req_ids.push(mongoose.Types.ObjectId(doc.request_id))
-      })
-      Request.find({
-        '_id': {
-          $in: req_ids
-        }
-      }, (err, accepted_requests) => {
-        console.log(accepted_requests);
-        res.render("Admin/outer_status", {
-          reqs: accepted_requests
->>>>>>> fbfaeb60aa155789b839affc894ef71766c8f1fc
-        })
-      })
-
-      /*
-      res.render('path_to_ejs' , {
-              name : "aasrith",
-              username : "jdnkjvn",
-              ph : 'djsbkjs'
-      })
-
-      <%= name %>
-      <%= username %>
-      <%= name %>
-       */
-    }
+  <<
+  << << < HEAD
+  let username = req.body.username;
+  let password = req.body.password;
+  let email = req.body.email;
+  console.log(username, password, email);
+  const studentData = new Student({
+    username: username,
+    bloodgroup: '',
+    phonenumber: '',
+    password: password,
+    email: email,
+    gender: ''
   })
+  studentData.save(function(err, book) {
+    if (err) return console.error(err);
+    console.log(`new student ${studentData.username} created);
+  });
+  res.redirect('/admin/dashboard/create_student')
 })
 
-module.exports = router;
+router.route('/dashboard/outer_status').get((req, res) => {
+      Request.find({}, (err, docs) => {
+        if (err) {
+          console.log(err);
+        } else if (!docs) {
+          console.log("doc not found");
+        } else {
+          console.log(docs);
+          req_ids = []
+          docs.forEach((doc) => {
+            req_ids.push(mongoose.Types.ObjectId(doc.request_id))
+          })
+          Request.find({
+            '_id': {
+              $in: req_ids
+            }
+          }, (err, accepted_requests) => {
+            console.log("safasf", accepted_requests);
+            res.render("Admin/outer_status", {
+              reqs: accepted_requests
+            })
+          })
+
+
+          /*res.render('path_to_ejs' , {
+                  name : "aasrith",
+                  username : "jdnkjvn",
+                  ph : 'djsbkjs'
+          })
+
+          <%= name %>
+          <%= username %>
+          <%= name %>*/
+
+        } ===
+        === =
+        bcrypt.hash(req.body.password, saltRounds, function(err, hash) {
+          let username = req.body.username;
+          let password = req.body.password;
+          let email = req.body.email;
+          console.log(username, password, email);
+          const studentData = new Student({
+            username: username,
+            bloodgroup: '',
+            phonenumber: '',
+            password: hash,
+            email: email,
+            gender: ''
+          })
+          studentData.save(function(error, book) {
+            if (error) return console.error(error);
+            console.log(`new student ${studentData.username} created`);
+          });
+          res.redirect('/admin/dashboard')
+        });
+      })
+
+      router.route('/dashboard/outer_status').get((req, res) => {
+        OutingStatus.find({}, (err, docs) => {
+          if (err) {
+            console.log(err);
+          } else if (!docs) {
+            console.log("doc not found");
+          } else {
+            console.log(docs);
+            req_ids = []
+            docs.forEach((doc) => {
+              req_ids.push(mongoose.Types.ObjectId(doc.request_id))
+            })
+            Request.find({
+              '_id': {
+                $in: req_ids
+              }
+            }, (err, accepted_requests) => {
+              console.log(accepted_requests);
+              res.render("Admin/outer_status", {
+                reqs: accepted_requests >>>
+                  >>> > fbfaeb60aa155789b839affc894ef71766c8f1fc
+              })
+            })
+
+            /*
+            res.render('path_to_ejs' , {
+                    name : "aasrith",
+                    username : "jdnkjvn",
+                    ph : 'djsbkjs'
+            })
+
+            <%= name %>
+            <%= username %>
+            <%= name %>
+             */
+          }
+        })
+      })
+
+      module.exports = router;
